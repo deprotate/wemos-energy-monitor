@@ -3,7 +3,7 @@
 ## Остальной код, ссылки для тестирования и видео работы:
   • Swagger UI: [https://energy-monitor-fastapi-production.up.railway.app/docs](https://energy-monitor-fastapi-production.up.railway.app/docs)  
   • Пользовательский сайт: [https://green-energy-reporter.netlify.app/](https://green-energy-reporter.netlify.app/)  
-  • GitHub Бэкэнда(API): [https://github.com/deprotate/energy-monitor-fastapi](https://github.com/deprotate/energy-monitor-fastapi)  
+  • GitHub Бэкэнда(API): [https://github.com/deprotate/energy-monitor-fastapi/tree/master](https://github.com/deprotate/energy-monitor-fastapi/tree/master)  
   • GitHub фронтенда: [https://github.com/deprotate/energy-monitor-frontend](https://github.com/deprotate/energy-monitor-frontend)  
 • Видео работы: [https://disk.yandex.ru/d/vQEiWjrruTO2ig](https://disk.yandex.ru/d/vQEiWjrruTO2ig)
 
