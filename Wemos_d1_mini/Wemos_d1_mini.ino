@@ -1,20 +1,25 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include <WiFiClientSecure.h>
-
+#include <math.h> 
 
 const char* ssid = "esp";
 const char* password = "12345678";
+
+const double solar_coefficient = 0.035;
+const unsigned int max_consumed_value = 20;
+const unsigned int mid_consumed_value = 10;
+const unsigned int min_consumed_value = 5;
 
 #define PIN_D1 5
 #define PIN_D2 4
 
 // Интервал цикла (1 секунда)
-unsigned long previousMillis = 0;
+unsigned long previous_millis = 0;
 const long interval = 1000; 
 
 
-int cycleCounter = 0;
+int cycle_counter = 0;
 int value_1 = 0;
 int value_2 = 0;
 
@@ -35,48 +40,44 @@ void setup() {
 }
 
 void loop() {
-  unsigned long currentMillis = millis();
-  if (currentMillis - previousMillis >= interval) {
-    previousMillis = currentMillis;
+  unsigned long current_millis = millis();
+  if (current_millis - previous_millis >= interval) {
+    previous_millis = current_millis;
     
 
-    int analogValue = analogRead(A0);
-    int d1Value = digitalRead(PIN_D1);
-    int d2Value = digitalRead(PIN_D2);
+    int analog_value = analogRead(A0);
+    int d1_value = digitalRead(PIN_D1);
+    int d2_value = digitalRead(PIN_D2);
     
-    if (analogValue > 500) {
-      value_1 += 10;
-    } else if (analogValue >= 100 && analogValue <= 500) {
-      value_1 += 5;
-    }
+    value_2 = round(analog_value * solar_coefficient);
     
-    if (d1Value == HIGH && d2Value == HIGH) {
-      value_2 += 3;
-    } else if (d1Value == HIGH || d2Value == HIGH) {
-      value_2 += 2;
+    if (d1_value == HIGH && d2_value == HIGH) {
+      value_1 += max_consumed_value;
+    } else if (d1_value == HIGH || d2_value == HIGH) {
+      value_1 += mid_consumed_value;
     } else {
-      value_2 += 1;
+      value_1 += min_consumed_value;
     }
     
-    cycleCounter++;
+    cycle_counter++;
     
     Serial.print("A0: ");
-    Serial.print(analogValue);
+    Serial.print(analog_value);
     Serial.print(" | D1: ");
-    Serial.print(d1Value);
+    Serial.print(d1_value);
     Serial.print(" | D2: ");
-    Serial.print(d2Value);
+    Serial.print(d2_value);
     Serial.print(" | Value_1: ");
     Serial.print(value_1);
     Serial.print(" | Value_2: ");
     Serial.println(value_2);
     
 
-    if (cycleCounter >= 5) {
+    if (cycle_counter >= 5) {
       sendPostRequest("1", value_1);
       sendPostRequest("2", value_2);
       
-      cycleCounter = 0;
+      cycle_counter = 0;
       value_1 = 0;
       value_2 = 0;
     }
